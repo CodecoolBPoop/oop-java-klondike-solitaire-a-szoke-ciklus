@@ -88,9 +88,9 @@ public class Card extends ImageView {
 
     public static List<Card> createNewDeck() {
         List<Card> result = new ArrayList<>();
-        for (int suit = 1; suit < 5; suit++) {
-            for (int rank = 1; rank < 14; rank++) {
-                result.add(new Card(suit, rank, true));
+        for (Suit suit : Suit.values()) {
+            for (Rank rank : Rank.values()) {
+                result.add(new Card(suit.number, rank.number, true));
             }
         }
         return result;
@@ -98,28 +98,52 @@ public class Card extends ImageView {
 
     public static void loadCardImages() {
         cardBackImage = new Image("card_images/card_back.png");
-        String suitName = "";
-        for (int suit = 1; suit < 5; suit++) {
-            switch (suit) {
-                case 1:
-                    suitName = "hearts";
-                    break;
-                case 2:
-                    suitName = "diamonds";
-                    break;
-                case 3:
-                    suitName = "spades";
-                    break;
-                case 4:
-                    suitName = "clubs";
-                    break;
-            }
-            for (int rank = 1; rank < 14; rank++) {
-                String cardName = suitName + rank;
-                String cardId = "S" + suit + "R" + rank;
+        for (Suit suit : Suit.values()) {
+            for (Rank rank : Rank.values()) {
+                String cardName = suit.name + rank.number;
+                String cardId = "S" + suit.number + "R" + rank.number;
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
+        }
+    }
+
+    public enum Suit {
+        HEARTS ("hearts", 1, "red"),
+        DIAMONDS ("diamonds", 2, "red"),
+        SPADES ("spades", 3, "black"),
+        CLUBS ("clubs", 4, "black");
+
+        private String name;
+        private int number;
+        private String color;
+
+        Suit(String name, int number, String color) {
+            this.name = name;
+            this.number = number;
+            this.color = color;
+        }
+    }
+
+    public enum Rank {
+        ACE (1),
+        TWO (2),
+        THREE (3),
+        FOUR (4),
+        FIVE (5),
+        SIX (6),
+        SEVEN (7),
+        EIGHT (8),
+        NINE (9),
+        TEN (10),
+        JACK (11),
+        QUEEN (12),
+        KING (13);
+
+        private int number;
+
+        Rank(int n) {
+            number = n;
         }
     }
 
