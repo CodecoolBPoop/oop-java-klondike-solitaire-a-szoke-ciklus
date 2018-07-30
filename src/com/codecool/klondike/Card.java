@@ -11,6 +11,7 @@ public class Card extends ImageView {
 
     private int suit;
     private int rank;
+    private String color;
     private boolean faceDown;
 
     private Image backFace;
@@ -23,8 +24,9 @@ public class Card extends ImageView {
     public static final int WIDTH = 150;
     public static final int HEIGHT = 215;
 
-    public Card(int suit, int rank, boolean faceDown) {
-        this.suit = suit;
+    public Card(Suit suit, int rank, boolean faceDown) {
+        this.suit = suit.number;
+        this.color = suit.color;
         this.rank = rank;
         this.faceDown = faceDown;
         this.dropShadow = new DropShadow(2, Color.gray(0, 0.75));
@@ -78,7 +80,7 @@ public class Card extends ImageView {
     }
 
     public static boolean isOppositeColor(Card card1, Card card2) {
-        return card1.suit % 2 != card2.suit % 2;
+        return !card1.color.equals(card2.color);
     }
 
     public static boolean isSameSuit(Card card1, Card card2) {
@@ -89,7 +91,7 @@ public class Card extends ImageView {
         List<Card> result = new ArrayList<>();
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
-                result.add(new Card(suit.number, rank.number, true));
+                result.add(new Card(suit, rank.number, true));
             }
         }
         return result;
