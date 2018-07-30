@@ -94,6 +94,7 @@ public class Card extends ImageView {
                 result.add(new Card(suit, rank.number, true));
             }
         }
+        shuffleCards(result);
         return result;
     }
 
@@ -107,6 +108,10 @@ public class Card extends ImageView {
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
         }
+    }
+
+    private static void shuffleCards(List<Card> deck) {
+        Collections.shuffle(deck);
     }
 
     public enum Suit {
