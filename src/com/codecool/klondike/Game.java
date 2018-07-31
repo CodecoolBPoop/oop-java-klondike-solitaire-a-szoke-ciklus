@@ -2,6 +2,7 @@ package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -14,6 +15,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile.PileType pileType = card.getContainingPile().getPileType();
         if (pileType == Pile.PileType.STOCK) {
+            card = stockPile.getTopCard();
             card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
@@ -49,7 +52,7 @@ public class Game extends Pane {
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
-        refillStockFromDiscard();
+        if (stockPile.isEmpty()) refillStockFromDiscard();
     };
 
     private EventHandler<MouseEvent> onMousePressedHandler = e -> {
@@ -114,7 +117,13 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        ObservableList<Card> discardedCards = discardPile.getCards();
+        FXCollections.reverse(discardedCards);
+        for (Card card : discardedCards) {
+            card.flip();
+            stockPile.addCard(card);
+        }
+        discardPile.clear();
         System.out.println("Stock refilled from discard pile.");
     }
 
