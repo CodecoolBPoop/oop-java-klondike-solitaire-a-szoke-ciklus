@@ -48,6 +48,7 @@ public class Game extends Pane {
                 if (isMoveValid(card, pile)) {
                     card.moveToPile(pile);
                     handleValidMove(card, pile);
+                    break;
                 }
             }
 
