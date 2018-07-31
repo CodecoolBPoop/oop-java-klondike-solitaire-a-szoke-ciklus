@@ -2,8 +2,10 @@ package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -100,6 +102,16 @@ public class Game extends Pane {
         deck = Card.createNewDeck();
         initPiles();
         dealCards();
+
+        Interaction inter = new Interaction();
+        Button newGameBtn = inter.newBtn("New Game",10, 10);
+        getChildren().add(newGameBtn);
+        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                inter.showModal("New modal", "This is the text");
+            }
+        });
     }
 
     public void addMouseEventHandlers(Card card) {
