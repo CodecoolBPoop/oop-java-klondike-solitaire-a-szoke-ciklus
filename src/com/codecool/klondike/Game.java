@@ -43,6 +43,14 @@ public class Game extends Pane {
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+        } else if ((pileType != Pile.PileType.FOUNDATION && !card.isFaceDown()) && e.getClickCount() == 2) {
+            for (Pile pile : foundationPiles) {
+                if (isMoveValid(card, pile)) {
+                    card.moveToPile(pile);
+                    handleValidMove(card, pile);
+                }
+            }
+
         }
     };
 
@@ -101,7 +109,7 @@ public class Game extends Pane {
     };
 
     private boolean isGameWon() {
-        int foundationCount = 0 ;
+        int foundationCount = 0;
         for (Pile pile : foundationPiles) {
             foundationCount += pile.numOfCards();
         }
@@ -170,7 +178,7 @@ public class Game extends Pane {
         if (destPile.isEmpty()) {
             if (destPile.getPileType().equals(Pile.PileType.FOUNDATION))
                 msg = String.format("Placed %s to the foundation.", card);
-                if (isGameWon()) handleWinningGame();
+            if (isGameWon()) handleWinningGame();
             if (destPile.getPileType().equals(Pile.PileType.TABLEAU))
                 msg = String.format("Placed %s to a new pile.", card);
         } else {
