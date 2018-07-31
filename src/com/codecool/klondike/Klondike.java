@@ -20,6 +20,8 @@ public class Klondike extends Application {
         Game game = new Game();
         game.setTableBackground(new Image("/table/green.png"));
 
+        Interaction.prStage = primaryStage;
+
         primaryStage.setTitle("Klondike Solitaire");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();

@@ -8,12 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -104,12 +99,22 @@ public class Game extends Pane {
         dealCards();
 
         Interaction inter = new Interaction();
-        Button newGameBtn = inter.newBtn("New Game",10, 10);
-        getChildren().add(newGameBtn);
-        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+        Button testButton = inter.newBtn("New Game", 10, 10);
+        getChildren().add(testButton);
+        testButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                inter.showModal("New modal", "This is the text");
+                int modalWidth = 230;
+                int modalHeight = 100;
+                StackPane modalPane = inter.showModal("New modal", "This is the text", modalWidth, modalHeight);
+                Button newGameBtn = inter.newBtn("New game", -modalWidth/2+80, modalHeight/2-20);
+                newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        modalPane.
+                    }
+                });
+                modalPane.getChildren().add(newGameBtn);
             }
         });
     }
@@ -130,6 +135,7 @@ public class Game extends Pane {
         //TODO
         return true;
     }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
