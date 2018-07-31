@@ -88,8 +88,12 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        //TODO
-        return false;
+        int foundationCount = 0 ;
+        for (Pile pile : foundationPiles) {
+            foundationCount += pile.numOfCards();
+        }
+
+        return foundationCount == 52; //standard 52-card deck
     }
 
     public Game() {
