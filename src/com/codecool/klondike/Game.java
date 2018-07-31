@@ -40,7 +40,7 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile.PileType pileType = card.getContainingPile().getPileType();
         if (pileType == Pile.PileType.STOCK) {
-            card.moveToPileAndFlip(discardPile);
+            card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
