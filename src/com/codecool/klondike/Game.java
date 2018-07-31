@@ -5,6 +5,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -13,6 +14,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
+import java.awt.dnd.DropTargetDragEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,7 +40,7 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile.PileType pileType = card.getContainingPile().getPileType();
         if (pileType == Pile.PileType.STOCK) {
-            card.moveToPile(discardPile);
+            card.moveToPileAndFlip(discardPile);
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
@@ -47,6 +49,12 @@ public class Game extends Pane {
             if (card.isFaceDown()) card.flip(); // TODO: make the top card flip automatically
         }
     };
+
+
+    private EventHandler<MouseDragEvent> onTableauCardsReleaseEvent = e -> {
+
+    };
+
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
         refillStockFromDiscard();
@@ -60,8 +68,9 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK)
+        if (activePile.getPileType() == Pile.PileType.STOCK) {
             return;
+        }
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
