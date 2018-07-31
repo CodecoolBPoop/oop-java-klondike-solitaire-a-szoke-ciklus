@@ -2,16 +2,13 @@ package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,7 +16,7 @@ import java.util.List;
 
 public class Game extends Pane {
 
-    private List<Card> deck = new ArrayList<>();
+    private List<Card> deck;
 
     private Pile stockPile;
     private Pile discardPile;
@@ -36,11 +33,15 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
-        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
+        Pile.PileType pileType = card.getContainingPile().getPileType();
+        if (pileType == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+        }
+        if (pileType == Pile.PileType.TABLEAU) {
+            if (card.isFaceDown()) card.flip(); // TODO: make the top card flip automatically
         }
     };
 
@@ -78,12 +79,16 @@ public class Game extends Pane {
             return;
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
-        //TODO
-        if (pile != null) {
+        if (pile != null && isMoveValid(card, pile)) {
             handleValidMove(card, pile);
         } else {
-            draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            pile = getValidIntersectingPile(card, foundationPiles);
+            if (pile != null && isMoveValid(card, pile)) {
+                handleValidMove(card, pile);
+            } else {
+                draggedCards.forEach(MouseUtil::slideBack);
+                draggedCards.clear();
+            }
         }
     };
 
@@ -115,9 +120,19 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        //TODO
-        return true;
+        Card topCard;
+        if (destPile.getPileType() == Pile.PileType.FOUNDATION) {
+            if (destPile.isEmpty()) return card.getRank() == 1;
+            topCard = destPile.getTopCard();
+            return Card.isSameSuit(card, topCard) && card.getRank() == topCard.getRank() + 1;
+        } else if (destPile.getPileType() == Pile.PileType.TABLEAU) {
+            if (destPile.isEmpty()) return card.getRank() == 13;
+            topCard = destPile.getTopCard();
+            return Card.isOppositeColor(card, topCard) && card.getRank() == topCard.getRank() - 1;
+        }
+        return false;
     }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
@@ -141,6 +156,7 @@ public class Game extends Pane {
         if (destPile.isEmpty()) {
             if (destPile.getPileType().equals(Pile.PileType.FOUNDATION))
                 msg = String.format("Placed %s to the foundation.", card);
+                if
             if (destPile.getPileType().equals(Pile.PileType.TABLEAU))
                 msg = String.format("Placed %s to a new pile.", card);
         } else {
@@ -149,6 +165,22 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
+    }
+
+    private void handleWinningGame() {
+        Interaction inter = new Interaction();
+        int modalWidth = 230;
+        int modalHeight = 100;
+        Interaction.showModal("New modal", "This is the text", modalWidth, modalHeight);
+        Button newGameBtn = inter.newBtn("New game", -modalWidth / 2 + 80, modalHeight / 2 - 20);
+        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO Call the new game method
+                Interaction.modalStage.close();
+            }
+        });
+        Interaction.modalPane.getChildren().add(newGameBtn);
     }
 
 
@@ -186,7 +218,17 @@ public class Game extends Pane {
 
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
+        int count = 1;
+        for (Pile tableauPile : tableauPiles) {
+            for (int i = 0; i < count; i++) {
+                Card card = deckIterator.next();
+                tableauPile.addCard(card);
+                addMouseEventHandlers(card);
+                getChildren().add(card);
+                if (i == count - 1) card.flip();
+            }
+            count++;
+        }
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);
