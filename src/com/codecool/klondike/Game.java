@@ -101,26 +101,6 @@ public class Game extends Pane {
         deck = Card.createNewDeck();
         initPiles();
         dealCards();
-
-        Interaction inter = new Interaction();
-        Button testButton = inter.newBtn("New Game", 10, 10);
-        getChildren().add(testButton);
-        testButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                int modalWidth = 230;
-                int modalHeight = 100;
-                StackPane modalPane = inter.showModal("New modal", "This is the text", modalWidth, modalHeight);
-                Button newGameBtn = inter.newBtn("New game", -modalWidth/2+80, modalHeight/2-20);
-                newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        modalPane.
-                    }
-                });
-                modalPane.getChildren().add(newGameBtn);
-            }
-        });
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -141,8 +121,7 @@ public class Game extends Pane {
             if (destPile.isEmpty()) return card.getRank() == 1;
             topCard = destPile.getTopCard();
             return Card.isSameSuit(card, topCard) && card.getRank() == topCard.getRank() + 1;
-        }
-        else if (destPile.getPileType() == Pile.PileType.TABLEAU) {
+        } else if (destPile.getPileType() == Pile.PileType.TABLEAU) {
             if (destPile.isEmpty()) return card.getRank() == 13;
             topCard = destPile.getTopCard();
             return Card.isOppositeColor(card, topCard) && card.getRank() == topCard.getRank() - 1;
@@ -173,6 +152,7 @@ public class Game extends Pane {
         if (destPile.isEmpty()) {
             if (destPile.getPileType().equals(Pile.PileType.FOUNDATION))
                 msg = String.format("Placed %s to the foundation.", card);
+                if
             if (destPile.getPileType().equals(Pile.PileType.TABLEAU))
                 msg = String.format("Placed %s to a new pile.", card);
         } else {
@@ -181,6 +161,22 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
+    }
+
+    private void handleWinningGame() {
+        Interaction inter = new Interaction();
+        int modalWidth = 230;
+        int modalHeight = 100;
+        Interaction.showModal("New modal", "This is the text", modalWidth, modalHeight);
+        Button newGameBtn = inter.newBtn("New game", -modalWidth / 2 + 80, modalHeight / 2 - 20);
+        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO Call the new game method
+                Interaction.modalStage.close();
+            }
+        });
+        Interaction.modalPane.getChildren().add(newGameBtn);
     }
 
 

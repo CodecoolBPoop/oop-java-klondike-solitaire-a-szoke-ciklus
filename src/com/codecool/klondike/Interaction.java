@@ -17,6 +17,12 @@ import javafx.scene.image.Image;
 import javafx.stage.*;
 
 public class Interaction {
+    public static Label modalLabel;
+    public static StackPane modalPane;
+    public static Scene modalScene;
+    public static Stage modalStage;
+
+
     public static Stage prStage;
 
     public Button newBtn(String textOnBtn, int posX, int posY) {
@@ -28,21 +34,18 @@ public class Interaction {
         return btn;
     }
 
-
-
-    public StackPane showModal(String title, String text, int modalWidth, int modalHeight) {
-        Label modalLabel = new Label(text);
-
-        StackPane modalPane = new StackPane();
+    public static void showModal(String title, String text, int modalWidth, int modalHeight) {
+        modalLabel = new Label(text);
+        modalPane = new StackPane();
         modalPane.getChildren().add(modalLabel);
-
-        Scene modalScene = new Scene(modalPane, modalWidth, modalHeight);
-        Stage modalStage = new Stage();
-
+        modalScene = new Scene(modalPane, modalWidth, modalHeight);
+        modalStage = new Stage();
         modalStage.setTitle(title);
         modalStage.setScene(modalScene);
 
-        Button closeBtn = newBtn("Close", modalHeight / 2, modalHeight / 2 - 20);
+        Interaction inter = new Interaction();
+
+        Button closeBtn = inter.newBtn("Close", modalHeight / 2, modalHeight / 2 - 20);
         modalPane.getChildren().add(closeBtn);
 
         //AOT + inactivate owner
@@ -53,6 +56,5 @@ public class Interaction {
         modalStage.initOwner(prStage);
 
         modalStage.show();
-        return modalPane;
     }
 }
