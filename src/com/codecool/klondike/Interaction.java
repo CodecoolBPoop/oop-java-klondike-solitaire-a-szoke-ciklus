@@ -1,19 +1,9 @@
 package com.codecool.klondike;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.*;
 
 public class Interaction {
@@ -25,7 +15,7 @@ public class Interaction {
 
     public static Stage prStage;
 
-    public Button newBtn(String textOnBtn, int posX, int posY) {
+    public static Button newBtn(String textOnBtn, int posX, int posY) {
         Button btn = new Button();
 
         btn.setText(textOnBtn);
@@ -43,18 +33,17 @@ public class Interaction {
         modalStage.setTitle(title);
         modalStage.setScene(modalScene);
 
-        Interaction inter = new Interaction();
-
-        Button closeBtn = inter.newBtn("Close", modalHeight / 2, modalHeight / 2 - 20);
+        Button closeBtn = newBtn("Close", modalHeight / 2, modalHeight / 2 - 20);
         modalPane.getChildren().add(closeBtn);
 
-        //AOT + inactivate owner
-        closeBtn.setOnAction(event -> {
-            modalStage.close();
-        });
+        closeBtn.setOnAction(event -> System.exit(0));
         modalStage.initModality(Modality.WINDOW_MODAL);
         modalStage.initOwner(prStage);
 
         modalStage.show();
+    }
+
+    public static void closeModal() {
+        modalStage.close();
     }
 }

@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -92,7 +91,7 @@ public class Game extends Pane {
         }
     };
 
-    public boolean isGameWon() {
+    private boolean isGameWon() {
         int foundationCount = 0 ;
         for (Pile pile : foundationPiles) {
             foundationCount += pile.numOfCards();
@@ -156,7 +155,7 @@ public class Game extends Pane {
         if (destPile.isEmpty()) {
             if (destPile.getPileType().equals(Pile.PileType.FOUNDATION))
                 msg = String.format("Placed %s to the foundation.", card);
-                if
+                if (isGameWon()) handleWinningGame();
             if (destPile.getPileType().equals(Pile.PileType.TABLEAU))
                 msg = String.format("Placed %s to a new pile.", card);
         } else {
@@ -168,19 +167,20 @@ public class Game extends Pane {
     }
 
     private void handleWinningGame() {
-        Interaction inter = new Interaction();
         int modalWidth = 230;
         int modalHeight = 100;
-        Interaction.showModal("New modal", "This is the text", modalWidth, modalHeight);
-        Button newGameBtn = inter.newBtn("New game", -modalWidth / 2 + 80, modalHeight / 2 - 20);
+        Interaction.showModal("You win!", "Congratulation, you have won!", modalWidth, modalHeight);
+
+        Button newGameBtn = Interaction.newBtn("New game", -modalWidth / 2 + 80, modalHeight / 2 - 20);
+        Interaction.modalPane.getChildren().add(newGameBtn);
+
         newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO Call the new game method
-                Interaction.modalStage.close();
+                //TODO Call the restart game method
+                Interaction.closeModal();
             }
         });
-        Interaction.modalPane.getChildren().add(newGameBtn);
     }
 
 
