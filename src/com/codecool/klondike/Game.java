@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Game extends Pane {
 
-    private List<Card> deck = new ArrayList<>();
+    private List<Card> deck;
 
     private Pile stockPile;
     private Pile discardPile;
@@ -79,12 +79,16 @@ public class Game extends Pane {
             return;
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
-        //TODO
-        if (pile != null) {
+        if (pile != null && isMoveValid(card, pile)) {
             handleValidMove(card, pile);
         } else {
-            draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            pile = getValidIntersectingPile(card, foundationPiles);
+            if (pile != null && isMoveValid(card, pile)) {
+                handleValidMove(card, pile);
+            } else {
+                draggedCards.forEach(MouseUtil::slideBack);
+                draggedCards.clear();
+            }
         }
     };
 
@@ -132,8 +136,18 @@ public class Game extends Pane {
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        //TODO
-        return true;
+        Card topCard;
+        if (destPile.getPileType() == Pile.PileType.FOUNDATION) {
+            if (destPile.isEmpty()) return card.getRank() == 1;
+            topCard = destPile.getTopCard();
+            return Card.isSameSuit(card, topCard) && card.getRank() == topCard.getRank() + 1;
+        }
+        else if (destPile.getPileType() == Pile.PileType.TABLEAU) {
+            if (destPile.isEmpty()) return card.getRank() == 13;
+            topCard = destPile.getTopCard();
+            return Card.isOppositeColor(card, topCard) && card.getRank() == topCard.getRank() - 1;
+        }
+        return false;
     }
 
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
