@@ -36,11 +36,15 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
-        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
+        Pile.PileType pileType = card.getContainingPile().getPileType();
+        if (pileType == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+        }
+        if (pileType == Pile.PileType.TABLEAU) {
+            if (card.isFaceDown()) card.flip(); // TODO: make the top card flip automatically
         }
     };
 
@@ -189,6 +193,7 @@ public class Game extends Pane {
                 tableauPile.addCard(card);
                 addMouseEventHandlers(card);
                 getChildren().add(card);
+                if (i == count - 1) card.flip();
             }
             count++;
         }
