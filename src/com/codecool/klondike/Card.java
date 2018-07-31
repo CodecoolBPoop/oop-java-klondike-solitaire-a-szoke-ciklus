@@ -65,12 +65,13 @@ public class Card extends ImageView {
     }
 
     public void moveToPile(Pile destPile) {
-        this.getContainingPile().getCards().remove(this);
-        if (this.getContainingPile().getPileType() == Pile.PileType.TABLEAU)
-            if (this.getContainingPile().getTopCard().isFaceDown())
-                this.getContainingPile().getTopCard().flip();
-
+        Pile prevPile = this.getContainingPile();
+        prevPile.getCards().remove(this);
         destPile.addCard(this);
+
+        if (prevPile.getPileType() == Pile.PileType.TABLEAU)
+            if (!prevPile.isEmpty() && prevPile.getTopCard().isFaceDown())
+                prevPile.getTopCard().flip();
     }
 
     public void flip() {
