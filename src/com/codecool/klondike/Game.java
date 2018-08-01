@@ -55,12 +55,6 @@ public class Game extends Pane {
         }
     };
 
-
-    private EventHandler<MouseDragEvent> onTableauCardsReleaseEvent = e -> {
-
-    };
-
-
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
         if (stockPile.isEmpty()) refillStockFromDiscard();
     };
@@ -80,15 +74,17 @@ public class Game extends Pane {
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
-        draggedCards.add(card);
+        List<Card> cards = activePile.getCards();
+        List<Card> cardsToDrag = cards.subList(cards.indexOf(card), cards.size());
+        draggedCards.addAll(cardsToDrag);
 
-        card.getDropShadow().setRadius(20);
-        card.getDropShadow().setOffsetX(10);
-        card.getDropShadow().setOffsetY(10);
+        draggedCards.forEach(c -> c.getDropShadow().setRadius(20));
+        draggedCards.forEach(c -> c.getDropShadow().setOffsetX(10));
+        draggedCards.forEach(c -> c.getDropShadow().setOffsetY(10));
 
-        card.toFront();
-        card.setTranslateX(offsetX);
-        card.setTranslateY(offsetY);
+        draggedCards.forEach(Card::toFront);
+        draggedCards.forEach(c -> c.setTranslateX(offsetX));
+        draggedCards.forEach(c -> c.setTranslateY(offsetY));
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
