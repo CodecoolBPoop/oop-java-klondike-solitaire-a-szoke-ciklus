@@ -194,11 +194,9 @@ public class Game extends Pane {
         int modalWidth = 230;
         int modalHeight = 100;
         Interaction.showModal("You win!", "Congratulation, you have won!", modalWidth, modalHeight);
+        Interaction.addQuitGameBtn();
+        Interaction.addNewGameBtn();
 
-        Button newGameBtn = Interaction.newBtn("New game", -modalWidth / 2 + 80, modalHeight / 2 - 20);
-        Interaction.modalPane.getChildren().add(newGameBtn);
-
-        newGameBtn.setOnAction(event -> Interaction.closeModal());
     }
 
 
