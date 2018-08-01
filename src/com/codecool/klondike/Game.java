@@ -43,6 +43,15 @@ public class Game extends Pane {
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+        } else if ((pileType != Pile.PileType.FOUNDATION && !card.isFaceDown()) && e.getClickCount() == 2) {
+            for (Pile pile : foundationPiles) {
+                if (isMoveValid(card, pile)) {
+                    card.moveToPile(pile);
+                    handleValidMove(card, pile);
+                    break;
+                }
+            }
+
         }
     };
 
@@ -58,7 +67,7 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK) {
+        if (activePile.getPileType() == Pile.PileType.STOCK || card.isFaceDown()) {
             return;
         }
         double offsetX = e.getSceneX() - dragStartX;
@@ -97,7 +106,7 @@ public class Game extends Pane {
     };
 
     private boolean isGameWon() {
-        int foundationCount = 0 ;
+        int foundationCount = 0;
         for (Pile pile : foundationPiles) {
             foundationCount += pile.numOfCards();
         }
@@ -166,7 +175,6 @@ public class Game extends Pane {
         if (destPile.isEmpty()) {
             if (destPile.getPileType().equals(Pile.PileType.FOUNDATION))
                 msg = String.format("Placed %s to the foundation.", card);
-                if (isGameWon()) handleWinningGame();
             if (destPile.getPileType().equals(Pile.PileType.TABLEAU))
                 msg = String.format("Placed %s to a new pile.", card);
         } else {
@@ -175,6 +183,7 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
+        if (isGameWon()) handleWinningGame();
     }
 
     private void handleWinningGame() {
@@ -185,13 +194,7 @@ public class Game extends Pane {
         Button newGameBtn = Interaction.newBtn("New game", -modalWidth / 2 + 80, modalHeight / 2 - 20);
         Interaction.modalPane.getChildren().add(newGameBtn);
 
-        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //TODO Call the restart game method
-                Interaction.closeModal();
-            }
-        });
+        newGameBtn.setOnAction(event -> Interaction.closeModal());
     }
 
 
