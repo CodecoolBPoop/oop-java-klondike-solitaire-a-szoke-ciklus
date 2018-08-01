@@ -23,6 +23,7 @@ public class MouseUtil {
         double sourceY = card.getLayoutY() + card.getTranslateY();
         double targetX = card.getLayoutX();
         double targetY = card.getLayoutY();
+        if (sourceX == targetX && sourceY == targetY) return;
         animateCardMovement(card, sourceX, sourceY,
                 targetX, targetY, Duration.millis(150), e -> {
                     card.getDropShadow().setRadius(2);
