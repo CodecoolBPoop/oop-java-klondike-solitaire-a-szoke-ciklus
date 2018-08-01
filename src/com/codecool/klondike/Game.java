@@ -82,7 +82,7 @@ public class Game extends Pane {
         draggedCards.forEach(c -> c.getDropShadow().setOffsetX(10));
         draggedCards.forEach(c -> c.getDropShadow().setOffsetY(10));
 
-        draggedCards.forEach(c -> c.toFront());
+        draggedCards.forEach(Card::toFront);
         draggedCards.forEach(c -> c.setTranslateX(offsetX));
         draggedCards.forEach(c -> c.setTranslateY(offsetY));
     };
