@@ -25,6 +25,9 @@ public class Klondike extends Application {
         primaryStage.setTitle("Klondike Solitaire");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
+        Interaction.showModal("You win!", "Congratulation, you have won!", 230, 100);
+        Interaction.addNewGameBtn();
+        Interaction.addQuitGameBtn();
     }
 
 }
