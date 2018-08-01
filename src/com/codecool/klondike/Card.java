@@ -104,7 +104,7 @@ public class Card extends ImageView {
     }
 
     public static void loadCardImages() {
-        cardBackImage = new Image("card_backs/card_back.png");
+        cardBackImage = new Image("card_backs/szoke_ciklon.png");
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
                 String cardName = suit.name + rank.number;
