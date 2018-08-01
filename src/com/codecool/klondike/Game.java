@@ -2,18 +2,14 @@ package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.awt.dnd.DropTargetDragEvent;
 import java.util.ArrayList;
@@ -104,9 +100,13 @@ public class Game extends Pane {
         }
     };
 
-    public boolean isGameWon() {
-        //TODO
-        return false;
+    private boolean isGameWon() {
+        int foundationCount = 0 ;
+        for (Pile pile : foundationPiles) {
+            foundationCount += pile.numOfCards();
+        }
+
+        return foundationCount == 52; //standard 52-card deck
     }
 
     public Game() {
@@ -139,14 +139,14 @@ public class Game extends Pane {
             if (destPile.isEmpty()) return card.getRank() == 1;
             topCard = destPile.getTopCard();
             return Card.isSameSuit(card, topCard) && card.getRank() == topCard.getRank() + 1;
-        }
-        else if (destPile.getPileType() == Pile.PileType.TABLEAU) {
+        } else if (destPile.getPileType() == Pile.PileType.TABLEAU) {
             if (destPile.isEmpty()) return card.getRank() == 13;
             topCard = destPile.getTopCard();
             return Card.isOppositeColor(card, topCard) && card.getRank() == topCard.getRank() - 1;
         }
         return false;
     }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {
@@ -170,6 +170,7 @@ public class Game extends Pane {
         if (destPile.isEmpty()) {
             if (destPile.getPileType().equals(Pile.PileType.FOUNDATION))
                 msg = String.format("Placed %s to the foundation.", card);
+                if (isGameWon()) handleWinningGame();
             if (destPile.getPileType().equals(Pile.PileType.TABLEAU))
                 msg = String.format("Placed %s to a new pile.", card);
         } else {
@@ -178,6 +179,23 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
+    }
+
+    private void handleWinningGame() {
+        int modalWidth = 230;
+        int modalHeight = 100;
+        Interaction.showModal("You win!", "Congratulation, you have won!", modalWidth, modalHeight);
+
+        Button newGameBtn = Interaction.newBtn("New game", -modalWidth / 2 + 80, modalHeight / 2 - 20);
+        Interaction.modalPane.getChildren().add(newGameBtn);
+
+        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO Call the restart game method
+                Interaction.closeModal();
+            }
+        });
     }
 
 
