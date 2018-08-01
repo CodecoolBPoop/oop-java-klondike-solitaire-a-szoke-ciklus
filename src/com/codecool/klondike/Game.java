@@ -198,13 +198,7 @@ public class Game extends Pane {
         Button newGameBtn = Interaction.newBtn("New game", -modalWidth / 2 + 80, modalHeight / 2 - 20);
         Interaction.modalPane.getChildren().add(newGameBtn);
 
-        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //TODO Call the restart game method
-                Interaction.closeModal();
-            }
-        });
+        newGameBtn.setOnAction(event -> Interaction.closeModal());
     }
 
 
