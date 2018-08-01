@@ -30,7 +30,6 @@ public class Interaction {
         modalPane.getChildren().add(newGameButton);
         newGameButton.setOnAction(event -> {
             closeModal();
-            //TODO Call reset game
             Klondike.restart(Interaction.prStage);
         });
         setBtnHooverStyle(newGameButton, "orange", "darkorange");
