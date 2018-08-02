@@ -64,6 +64,11 @@ public class Card extends ImageView {
         this.containingPile = containingPile;
     }
 
+    public void refreshCardBack() {
+        backFace = Card.cardBackImage;
+        setImage(faceDown ? backFace : frontFace);
+    }
+
     public void moveToPile(Pile destPile) {
         Pile prevPile = this.getContainingPile();
         prevPile.getCards().remove(this);
