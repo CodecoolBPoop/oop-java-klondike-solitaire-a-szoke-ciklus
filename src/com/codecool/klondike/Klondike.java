@@ -28,6 +28,7 @@ public class Klondike extends Application {
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
         game.getChildren().add(menuBar);
         Interaction.prStage = primaryStage;
+        Interaction.game = game;
         primaryStage.setTitle("Klondike Solitaire");
         primaryStage.getIcons().add(new Image("/icon.png"));
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));

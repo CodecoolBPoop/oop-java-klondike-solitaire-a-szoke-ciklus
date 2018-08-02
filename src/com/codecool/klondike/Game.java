@@ -183,16 +183,14 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
-        if (isGameWon()) handleWinningGame();
+        if (!isGameWon()) handleWinningGame();
     }
 
     private void handleWinningGame() {
-        int modalWidth = 230;
-        int modalHeight = 100;
-        Interaction.showModal("You win!", "Congratulation, you have won!", modalWidth, modalHeight);
+        int modalWidth = 426, modalHeight = 100;
+        Interaction.showModal("You win!", "Congratulations, you have won!", modalWidth, modalHeight);
         Interaction.addQuitGameBtn();
         Interaction.addNewGameBtn();
-
     }
 
 
@@ -253,6 +251,10 @@ public class Game extends Pane {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+    }
+
+    public List<Card> getDeck() {
+        return deck;
     }
 
 }
