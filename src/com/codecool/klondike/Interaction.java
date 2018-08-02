@@ -1,8 +1,8 @@
 package com.codecool.klondike;
 
 import com.sun.xml.internal.bind.v2.model.core.ID;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.application.Platform;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.Scene;
 import javafx.stage.*;
@@ -13,8 +13,31 @@ public class Interaction {
     public static Scene modalScene;
     public static Stage modalStage;
 
-
     public static Stage prStage;
+
+
+    public static MenuBar createMenuBar() {
+        MenuBar menuBar = new MenuBar();
+        Menu gameMenu = new Menu("Game");
+        MenuItem newGame = new MenuItem("New");
+        newGame.setOnAction(event -> Klondike.restart(Interaction.prStage));
+        gameMenu.getItems().add(newGame);
+        gameMenu.getItems().add(new SeparatorMenuItem());
+        gameMenu.getItems().add(new MenuItem("Undo"));
+        gameMenu.getItems().add(new MenuItem("Redo"));
+        gameMenu.getItems().add(new MenuItem("Shuffle"));
+        gameMenu.getItems().add(new SeparatorMenuItem());
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction(event -> Platform.exit());
+        gameMenu.getItems().add(exit);
+
+        Menu optionsMenu = new Menu("Options");
+        optionsMenu.getItems().add(new MenuItem("Deck"));
+
+        menuBar.getMenus().addAll(gameMenu, optionsMenu);
+
+        return menuBar;
+    }
 
     private static Button newBtn(String textOnBtn, double posX, double posY) {
         Button btn = new Button();
@@ -46,7 +69,7 @@ public class Interaction {
     public static Button addQuitGameBtn() {
         Button quitGameButton = newBtn("Quit game", -modalStage.getWidth() / 2 + 50, modalStage.getHeight() / 2 - 20);
         modalPane.getChildren().add(quitGameButton);
-        quitGameButton.setOnAction(event -> System.exit(0));
+        quitGameButton.setOnAction(event -> Platform.exit());
         return quitGameButton;
     }
 
