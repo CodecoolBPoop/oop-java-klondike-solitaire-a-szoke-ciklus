@@ -183,7 +183,7 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
-        if (!isGameWon()) handleWinningGame();
+        if (isGameWon()) handleWinningGame();
     }
 
     private void handleWinningGame() {
