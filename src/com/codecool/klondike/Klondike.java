@@ -16,12 +16,16 @@ public class Klondike extends Application {
     }
 
     @Override
+    public void init() {
+        Card.loadCardImages();
+    }
+
+    @Override
     public void start(Stage primaryStage) {
        startGame(primaryStage);
     }
 
     private static void startGame(Stage primaryStage) {
-        Card.loadCardImages();
         Game game = new Game();
         game.setTableBackground(new Image("/table/green.png"));
         MenuBar menuBar = Interaction.createMenuBar();

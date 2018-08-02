@@ -1,19 +1,12 @@
 package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-import java.awt.dnd.DropTargetDragEvent;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -120,14 +113,14 @@ public class Game extends Pane {
         dealCards();
     }
 
-    public void addMouseEventHandlers(Card card) {
+    private void addMouseEventHandlers(Card card) {
         card.setOnMousePressed(onMousePressedHandler);
         card.setOnMouseDragged(onMouseDraggedHandler);
         card.setOnMouseReleased(onMouseReleasedHandler);
         card.setOnMouseClicked(onMouseClickedHandler);
     }
 
-    public void refillStockFromDiscard() {
+    private void refillStockFromDiscard() {
         ObservableList<Card> discardedCards = discardPile.getCards();
         FXCollections.reverse(discardedCards);
         for (Card card : discardedCards) {
@@ -138,7 +131,7 @@ public class Game extends Pane {
         System.out.println("Stock refilled from discard pile.");
     }
 
-    public boolean isMoveValid(Card card, Pile destPile) {
+    private boolean isMoveValid(Card card, Pile destPile) {
         Card topCard;
         if (destPile.getPileType() == Pile.PileType.FOUNDATION) {
             if (destPile.isEmpty()) return card.getRank() == 1;
@@ -226,7 +219,7 @@ public class Game extends Pane {
         }
     }
 
-    public void dealCards() {
+    private void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
         int count = 1;
         for (Pile tableauPile : tableauPiles) {
